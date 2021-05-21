@@ -1,0 +1,294 @@
+
+#: import utils kivy.utils
+ScreenManager:
+    WelcomeScreen:
+    SignIn:
+    HomeScreen:   
+    SettingsScreen:
+    KisimaniScreen:
+    TenantScreen:
+  
+<WelcomeScreen>:
+    name: 'welcomescreen'
+    MDScreen:
+        orientation: 'vertical'
+        md_bg_color: app.theme_cls.primary_color
+        Button:
+            background_normal: 'images/start.jpg'
+            opacity: 0.5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_press:
+                root.manager.current = 'signin'
+                root.manager.transition.duration = 0
+
+<SignIn>:
+    name: 'signin'
+    MDScreen:
+        orientation: 'vertical'           
+        MDLabel:
+            text: 'LOGIN'
+            font_style: 'Button'
+            font_size: 45
+            halign: 'center'
+            size_hint_y: None
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            height: self.texture_size[1]
+
+        MDTextField:
+            id: username
+            helper_text: 'required'
+            helper_text_mode: 'on_error'
+            size_hint: .8, None
+            hint_text: 'username'
+            icon_right: 'account'
+            icon_right_color: app.theme_cls.primary_color
+            size_hint_x: .8
+            font_size: 20
+            width: 220
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            required: True
+
+        MDTextField:
+            id: password
+            helper_text: 'Dont forget password'
+            helper_text_mode: 'on_focus'
+            icon_right: 'eye-off'
+            icon_right_color: app.theme_cls.primary_color
+            size_hint: None, None
+            hint_text: 'password'
+            size_hint_x: .8
+            font_size: 20
+            width: 220
+            password: True
+            pos_hint: {'center_x': .5, 'center_y': .4}
+
+        MDFillRoundFlatButton:
+            text: 'sign up'
+            pos_hint: {'center_x': .5, 'center_y': .3}
+            size_hint_x: .8
+            on_release: app.validate_user(username.text, password.text)
+    
+<HomeScreen>:
+    id: home_screen
+    name: 'homescreen'
+    ScrollView:
+        GridLayout:
+            cols: 1
+            padding: 10, 10
+            spacing: 10, 10
+            height: self.minimum_height
+            row_default_height: 150
+        
+            SmartTileWithStar:
+                source: 'images/kisimani.jpg'
+                text: 'KISIMANI'
+                on_press: 
+                    root.manager.current = 'Kisimani_Screen'
+                    root.manager.transition.duration = 0.0
+            SmartTileWithStar:
+                source: 'images/Bombolulu.jpg'
+                text: 'BOMBOLULU'
+            SmartTileWithStar:
+                source: 'images/shelly.jpg'
+                text: 'SHELL'
+            SmartTileWithStar:
+                source: 'images/shepherd.jpg'
+                text: 'SHEPHERD'
+                radius: [25,25,25,25]
+            SmartTileWithStar:
+                source: 'images/shepherd.jpg'
+                text: 'SHEPHERD'
+                radius: [25,25,25,25]
+            SmartTileWithStar:
+                source: 'images/shepherd.jpg'
+                text: 'SHEPHERD'
+                radius: [25,25,25,25]
+         
+    
+
+    Screen:
+        MDNavigationDrawer:
+            id: nav_drawer 
+            BoxLayout:
+                orientation: 'vertical'
+                Image:
+                    source: 'images/outdoor.jpg'
+                    pos: self.pos
+                ScrollView:
+                    MDList:
+                        OneLineIconListItem:
+                            text: 'Home'
+                            on_release: root.manager.current = 'homescreen'
+                            IconLeftWidget:
+                                icon: 'home-city'
+                        
+                        OneLineIconListItem:
+                            text: 'Settings'
+                            on_release: 
+                                root.manager.current = 'settings_screen'
+                                root.manager.transition.duration = 0.0
+                            IconLeftWidget:
+                                icon: 'settings'
+                        
+                        OneLineIconListItem:
+                            text: 'Exit'
+                            on_press: app.exit()
+                            IconLeftWidget:
+                                icon: 'exit-to-app'
+        BoxLayout:
+            orientation: 'vertical'
+            MDToolbar:
+                id: toolbar
+                title: 'Home'
+                elevation: 5
+                pos_hint: {'top': 1}
+                left_action_items: [['menu', lambda x: nav_drawer.set_state()]]
+            Widget:
+                        
+                        
+<SettingsScreen>
+    name: 'settings_screen'
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Settings'
+            elevation: 10
+            pos_hint: {'top': 1}
+            left_action_items: [['keyboard-backspace', lambda x: app.returning()]]           
+        BoxLayout:
+            orientation: 'vertical'
+            ScrollView:
+                MDList:
+                    OneLineAvatarIconListItem:
+                        text: 'Developer'
+                        on_release: app.developer()
+                        IconLeftWidget:
+                            icon: 'dev-to'
+                    TwoLineAvatarIconListItem:
+                        text: 'change theme'
+                        secondary_text: 'click to change mode'
+                        on_release: app.change_theme_style()
+                        IconLeftWidget:
+                            icon: "theme-light-dark"
+                 
+              
+            
+<KisimaniScreen>:
+    id: kisimani
+    name: 'Kisimani_Screen'
+
+    Screen:
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Kisimani'
+            elevation: 5
+            pos_hint: {'top': 1}
+            left_action_items: [['keyboard-backspace', lambda x: app.returning()]]
+            
+        MDFloatingActionButton:       
+            icon: 'account-plus'
+            md_bg_color: app.theme_cls.primary_color
+            pos_hint: {'center_x': .8, 'center_y': .2}
+            on_press:
+                root.manager.current = 'tenant_screen'
+                root.manager.transition.duration = 0.0
+
+<TenantScreen>:
+    name: 'tenant_screen'
+    Screen:
+        orientation: 'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Add Kisimani Tenants'
+            elevation: 5
+            pos_hint: {'top': 1}
+            left_action_items: [['keyboard-backspace', lambda x: app.returning2()]]
+        Screen:
+            MDLabel:
+                text: 'Add Tenant'
+                font_style: 'H6'
+                font_size: 30
+                halign: 'center'
+                size_hint_y: None
+                pos_hint: {'center_x': .5, 'center_y': .8}
+                height: self.texture_size[1]
+
+            MDTextField:
+                id: HouseNum
+                size_hint: .8, None
+                hint_text: 'House No.'
+                icon_right: 'houzz'
+                icon_right_color: app.theme_cls.primary_color
+                size_hint_x: .8
+                font_size: 20
+                width: 220
+                pos_hint: {'center_x': .5, 'center_y': .7}
+            MDTextField:
+                id: Name
+                size_hint: .8, None
+                hint_text: 'First & Last Names'
+                icon_right: 'account'
+                icon_right_color: app.theme_cls.primary_color
+                size_hint_x: .8
+                font_size: 20
+                width: 220
+                pos_hint: {'center_x': .5, 'center_y': .6}
+            MDTextField:
+                id: occupation
+                size_hint: .8, None
+                hint_text: 'Occupation'
+                icon_right: 'worker'
+                icon_right_color: app.theme_cls.primary_color
+                size_hint_x: .8
+                font_size: 20
+                width: 220
+                pos_hint: {'center_x': .5, 'center_y': .5}
+
+            MDTextField:
+                id: idnumber
+                size_hint: .8, None
+                hint_text: 'ID No.'
+                icon_right: 'identifier'
+                icon_right_color: app.theme_cls.primary_color
+                size_hint_x: .8
+                font_size: 20
+                width: 220
+                pos_hint: {'center_x': .5, 'center_y': .4}
+                input_type: 'number'
+                max_text_length: 8
+
+            MDTextField:
+                id: mydate
+                size_hint: .8, None
+                hint_text: 'Date'
+                helper_text: 'Double tap for calender'
+                helper_text_mode: 'on_focus'
+                icon_right: 'calendar-today'
+                icon_right_color: app.theme_cls.primary_color
+                size_hint_x: .8
+                font_size: 20
+                width: 220
+                pos_hint: {'center_x': .5, 'center_y': .3}
+                multiline: False 
+                on_double_tap: app.show_date_picker()
+
+            MDFillRoundFlatButton:
+                text: 'save to table'
+                pos_hint: {'center_x': .5, 'center_y': .2}
+                on_press:
+                    root.manager.current = "Kisimani_Screen"
+
+
+
+
+
+        
+            
+            
+                       
+                            
+            
+ 
+
